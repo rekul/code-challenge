@@ -15,15 +15,14 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import { getUsers /* bonus:, deleteUser*/ } from "./apiMethods";
+import API from './apiMethods'
+import UsersDisplay from "./components/UserDisplay/UsersDisplay.js"
 
-import "./styles.css";
 
 function App() {
   return (
     <div className="App">
-      <h2>Users from API:</h2>
-      <div>{/* List of Users from API */}</div>
+      <UsersDisplay API={API}/>
     </div>
   );
 }

@@ -1,0 +1,17 @@
+/* node-sass isn't playing nice with whatever create-react-app version was used for this */
+
+.users{
+    display:flex;
+    justify-content: space-around;
+    flex-wrap:wrap;
+}
+
+.UserCard{
+    background:#ddd;
+    padding:1em;
+    margin:1em;
+    text-align: center;
+    min-width:180px;
+    box-shadow:2px 2px 4px rgba(0,0,0,0.3);
+    border:1px solid #aaa;
+}

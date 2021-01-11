@@ -10,9 +10,25 @@
 
 import axios from "axios";
 
-const baseUrl = "https://reqres.in/";
+const baseUrl = "https://reqres.in/api";
 
-export const getUsers = () => {};
+const API = {
+  getUsers:(page, cb) => {
 
-// Bonus:
-export const deleteUser = () => {};
+    const reqURL = `${baseUrl}/users/?page=${page}`
+  
+    axios.get(reqURL)
+      .then((res)=>{
+        console.log('res', res);
+        if(cb) cb(res.data)
+      })
+      .catch((err)=>{
+        console.log('err', err);
+      })
+  
+  },
+  deleteUser: () => {}
+  
+}
+
+export default API;
