@@ -20,19 +20,26 @@ const UsersDisplay = props => {
     const [page, setPage] = useState(1);
     const [pageInfo, setPageInfo] = useState(null); // how many pages etc
     const [userIDToDelete, setUserIDToDelete] = useState(null); //are you sure popup
-    const [search, setSearch] = useState('');// this search only looks at current page
+    const [search, setSearch] = useState('');// this search only looks at current page - probably should search all users
+
+    const [errorMessage, setErrorMessage] = useState('');
 
     const userToDelete = userIDToDelete === null ? null : users.filter(user => user.id === userIDToDelete)[0];
 
     //array of hidden user ids - since delete in our API doesn't actually do anything on delete except send back 204
+    //NOTE this is done purely to make the UI work for demo purposes - in the real world I would call out that the API doesn't work as expected. 
     const [hiddenUsers, setHiddenUsers] = useState([]);
 
     const getUsers = () => {
-        props.API.getUsers(page, (data)=>{
-            console.log('data', data)
-            setUsers(data.data);
+        props.API.getUsers(page, (res)=>{
+            // console.log('data', data)
+            if(res.status !== 200){
+                setErrorMessage('Error: cannot find users.');
+                return;
+            }
+            setUsers(res.data.data);
             setPageInfo({
-                total_pages:data.total_pages,
+                total_pages:res.data.total_pages,
             })
         })
     }
@@ -40,11 +47,13 @@ const UsersDisplay = props => {
         props.API.deleteUser(userID, (res) => {
             //expect 204
             if(res.status === 204){
-                console.log('success', res)
+                // console.log('success', res)
                 setUserIDToDelete(null)
                 setHiddenUsers([...hiddenUsers, userID])
             }else{
-                console.log('failure', res)
+                console.error('delete user failure', res)
+                setUserIDToDelete(null)
+                setErrorMessage('Error: failed to delete user.');
             }
         })
     }
@@ -67,11 +76,18 @@ const UsersDisplay = props => {
             {/* search bar */}
             <input type="text" val={search} onChange={onSearchChange} placeholder={'Search Users'}/>
 
+            {errorMessage && <div className={`error`} style={{color:"red"}}>
+                <p>
+                    {errorMessage}
+                </p>
+            <button onClick={()=>setErrorMessage('')}>OK</button>
+            </div>}
+
             {
                 //loop through users make cards
                 Array.isArray(users) &&
                 <div className="users">
-                    {users.filter((user, userIndex) => {
+                    {users.filter(user => {
                         //search filter
                         if(!search) return true;
                         return (
@@ -79,13 +95,13 @@ const UsersDisplay = props => {
                                 typeof val === 'string' && val.toLowerCase().trim().includes(search.toLowerCase().trim())
                                 ).length > 0
                         )
-                    }).filter((user, userIndex) => {
-                        //hidden users filter
+                    }).filter(user => {
+                        //hidden users filter - again, this is just so 'delete' works in this demo visually with the API that doesn't do anything on 'successful' delete. If I had an API team to cry to I would.
                         return !hiddenUsers.includes(user.id)
-                    }).map((user, userIndex) => {
+                    }).map(user => {
                         //render the card
                         return <UserCard 
-                        key={`user-card-${page}-${userIndex}`} 
+                        key={`user-card-${page}-${user.id}`} 
                         handleDelete={setUserIDToDelete}
                         data={user}/>
                     })}
