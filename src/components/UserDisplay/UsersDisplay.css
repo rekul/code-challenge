@@ -14,4 +14,84 @@
     min-width:180px;
     box-shadow:2px 2px 4px rgba(0,0,0,0.3);
     border:1px solid #aaa;
+    transform:translateY(0);
+    transition:all 0.3s ease;
+}
+.UserCard:hover{
+    cursor:pointer;
+    transform:translateY(-0.3em);
+}
+
+.pagination{
+    text-align: center;
+    margin-top:2em;
+}
+.pagination>*{
+    margin:1em;
+}
+
+button:hover{
+    cursor: pointer;
+}
+
+.modal{
+    position: absolute;
+    top:0;
+    left:0;
+    height:100%;
+    width:100%;
+    display:flex;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+
+.modal .scrim{
+    position: absolute;
+    top:0;
+    left:0;
+    height:100%;
+    width:100%;
+    background:rgba(255,255,255, 0.8);
+    animation:fadeIn 0.3s ease-in;
+    z-index: 1;
+}
+
+.modal .body{
+    position: relative;
+    background:white;
+    z-index: 2;
+    border:1px solid #ddd;
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    padding:1em;
+    margin-top:4em;
+    animation: modalReveal 0.4s 0.3s forwards ease-in;
+
+    transform:translateY(-3em);
+    opacity:0;
+
+}
+
+
+.modal .body .actions{
+    display:flex;
+    justify-content: space-around;
+    margin:2em;
+}
+@keyframes fadeIn{
+    from{
+        opacity:0;
+    }
+    to{
+        opacity:1;
+    }
+}
+@keyframes modalReveal{
+    from{
+        transform:translateY(3em);
+        opacity:0;
+    }
+    to{
+        transform:translateY(0);
+        opacity:1;
+    }
 }

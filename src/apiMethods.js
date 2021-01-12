@@ -12,6 +12,7 @@ import axios from "axios";
 
 const baseUrl = "https://reqres.in/api";
 
+//with small API, I prefer to use object and pass it around tree as a prop rather than importing/passing individual methods. 
 const API = {
   getUsers:(page, cb) => {
 
@@ -27,7 +28,19 @@ const API = {
       })
   
   },
-  deleteUser: () => {}
+  deleteUser: (userID, cb) => {
+    const reqURL = `${baseUrl}/users/${userID}`
+  
+    axios.delete(reqURL)
+      .then((res)=>{
+        console.log('res', res);
+        if(cb) cb(res)
+      })
+      .catch((err)=>{
+        console.log('err', err);
+      })
+
+  }
   
 }
 
